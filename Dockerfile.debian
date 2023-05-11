@@ -1,0 +1,31 @@
+# Stage 1: Build
+FROM debian AS build
+
+# Install required dependencies
+RUN apt-get update && \
+    apt-get install -y \
+	wget \
+	git \
+	libicu-dev
+
+# Install dotnet
+RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+    chmod +x dotnet-install.sh && \
+	./dotnet-install.sh --channel STS --version latest && \
+	rm -f dotnet-install.sh
+
+RUN git clone --depth 1 https://github.com/berichan/SysBot.ACNHOrders.git
+RUN dotnet publish /SysBot.ACNHOrders/SysBot.ACNHOrders.csproj \
+		-p:PublishSingleFile=true \
+		-p:DebugType=None \
+		--configuration release \
+		--framework net7.0 \
+		--self-contained \
+		--use-current-runtime \
+		-o /opt/acnh-orders
+
+# Stage 2: Create the image
+FROM debian
+COPY --from=build /opt/acnh-orders /opt/acnh-orders
+WORKDIR /opt/acnh-orders
+CMD ["./SysBot.ACNHOrders"]

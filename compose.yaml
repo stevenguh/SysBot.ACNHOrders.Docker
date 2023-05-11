@@ -1,0 +1,12 @@
+version: '3'
+services:
+  acnh-orders:
+    image: sysbot-acnh-orders:latest
+    container_name: sysbot-acnh-orders
+    build: .
+    volumes:
+      - ./presets:/opt/acnh-orders/presets
+      - ./Anchors.bin:/opt/acnh-orders/Anchors.bin
+      - ./config.json:/opt/acnh-orders/config.json
+    restart: unless-stopped
+    network_mode: host
