@@ -19,7 +19,7 @@ RUN dotnet publish /SysBot.ACNHOrders/SysBot.ACNHOrders.csproj \
 		-p:PublishSingleFile=true \
 		-p:DebugType=None \
 		--configuration release \
-		--framework net7.0 \
+		--framework net8.0 \
 		--self-contained \
 		--use-current-runtime \
 		-o /opt/acnh-orders
